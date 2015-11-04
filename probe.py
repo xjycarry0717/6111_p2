@@ -9,6 +9,7 @@ class probe:
         self.accountKey=accountKey
         self.cov= ECoverage
         self.spec=ESpecificity
+        self.url={"Root":[],"Computers":[],"Health":[],"Sports":[]}
         #self.category={"Root":{"Computers":["Hardware","Programming"],"Health":["Fitness","Diseases"],"Sports":["Basketball","Soccer"]}}
         return
 
@@ -27,7 +28,7 @@ class probe:
         #print querydict
         return querydict
 
-    def search(self, queryList):
+    def search(self, category,queryList):
         #change blank space in the query into %20
         query = queryList.replace(" ","%20")
         bingUrl ='https://api.datamarket.azure.com/Data.ashx/Bing/SearchWeb/v1/Composite?Query=%27site%3a'+self.site+'%20'+query+'%27&$top=10&$format=json'
@@ -39,42 +40,58 @@ class probe:
         response = urllib2.urlopen(req)
         content = json.loads(response.read())
         num=int(content["d"]["results"][0]["WebTotal"])
+        for i in range(len(content["d"]["results"][0]["Web"])):
+            if i==4:
+                break
+            address=content["d"]["results"][0]["Web"][i]["Url"]
+            #print address
+            self.url[category].append(address)
         return num
 
     def build(self):
         coverage={}
         specificity={}
         total=0
+        print "Classifying..."
         rootquery=self.getquery("Root")
         for subcategory in rootquery.keys():
             coverage[subcategory]=0
             for query in rootquery[subcategory]:
-                coverage[subcategory]=coverage[subcategory]+self.search(query)
+                coverage[subcategory]=coverage[subcategory]+self.search("Root",query)
             total=total+coverage[subcategory]
         for subcategory in rootquery.keys():
             specificity[subcategory]=1.0*coverage[subcategory]/total
+            print "Specificity for category "+subcategory+" is "+str(specificity[subcategory])
+            print "Coverage for category "+subcategory+" is "+str(coverage[subcategory])
 
         for category in rootquery.keys():
-            query=self.getquery(category)
-            total=0
-            for subcategory in query.keys():
-                coverage[subcategory]=0
-                for queries in query[subcategory]:
-                    coverage[subcategory]=coverage[subcategory]+self.search(queries)
-                total=total+coverage[subcategory]
-            for subcategory in query.keys():
-                specificity[subcategory]=specificity[category]*coverage[subcategory]/total
+            if coverage[category]>=self.cov and specificity[category]>=self.spec:
+                query=self.getquery(category)
+                total=0
+                for subcategory in query.keys():
+                    coverage[subcategory]=0
+                    for queries in query[subcategory]:
+                        coverage[subcategory]=coverage[subcategory]+self.search(category,queries)
+                    total=total+coverage[subcategory]
+                for subcategory in query.keys():
+                    specificity[subcategory]=specificity[category]*coverage[subcategory]/total
+                    print "Specificity for category "+subcategory+" is "+str(specificity[subcategory])
+                    print "Coverage for category "+subcategory+" is "+str(coverage[subcategory])
 
-        print coverage
-        print specificity
+        print ""
+        print "Classification:"
         result=["Root"]
         for category in coverage.keys():
             if coverage[category]>=self.cov and specificity[category]>=self.spec:
                 result.append(category)
-        print result
+
+        for i in range(len(result)-1):
+            print result[i]+"/",
+        print result[len(result)-1]
         return result
 
 
 if __name__ == '__main__':
     qprobe=probe('diabetes.org','OzVX5Yq6tlnpOrdFaJkqIdoVAs7zFQrn+dbBhFHBAhw', 100, 0.6)
     qprobe.build()
+    #print qprobe.url["Root"]
