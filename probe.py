@@ -97,11 +97,7 @@ class probe:
                 else:
                     for subcategory in result["Root"][category]:
                         print "/Root/"+category+"/"+subcategory
-        #print result[len(result)-1]
         return result
 
 
-if __name__ == '__main__':
-    qprobe=probe('yahoo.com','XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0', 100, 0.8)
-    qprobe.build()
-    #print qprobe.url["Root"]
+

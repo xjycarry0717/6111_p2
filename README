@@ -1,1 +1,37 @@
-account key: OzVX5Yq6tlnpOrdFaJkqIdoVAs7zFQrn+dbBhFHBAhw
+COMS6111 P2 QProber and ContentSummary
+
+a. Team members:
+Jiayi Yan  - jy2677
+Jiaying Xu - jx2238
+
+b. Files:
+README
+main.py
+probe.py
+summary.py
+
+c. How to run
+python main.py <account key> <t_es> <t_ec> <host>
+<account key>: 	bing api key 		
+<t_es>:   		float in (0, 1), 	
+<t_ec>:       	int
+<host>: 		database url
+
+d. Internal design
+part 1)
+
+part 2)
+After getting all the url for each category, 
+	For each level-1 category, duplicate urls are elimiated. All the url are retrieved except pdf and ppt. If there is an error during url retrieval, the url is ignored; 
+	For root category, duplicate urls from subcategories are eliminated.
+After url retrieval, for each page,
+	Remove reference section at the end.
+	Remove everything inside [].
+	Change char other than alphabet to space.
+	Separate words by space.
+	Change words to lowercase.
+Then map<word, frequency> is built and then wrote to file.
+Each page retrieved is processed before fetching next page to space requests.
+
+e. Bing account key
+1.XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0
