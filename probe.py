@@ -64,8 +64,11 @@ class probe:
             print "Specificity for category "+subcategory+" is "+str(specificity[subcategory])
             print "Coverage for category "+subcategory+" is "+str(coverage[subcategory])
 
+        result={}
+        result["Root"]={}
         for category in rootquery.keys():
             if coverage[category]>=self.cov and specificity[category]>=self.spec:
+                result["Root"][category]=[]
                 query=self.getquery(category)
                 total=0
                 for subcategory in query.keys():
@@ -77,21 +80,28 @@ class probe:
                     specificity[subcategory]=specificity[category]*coverage[subcategory]/total
                     print "Specificity for category "+subcategory+" is "+str(specificity[subcategory])
                     print "Coverage for category "+subcategory+" is "+str(coverage[subcategory])
+                    if coverage[subcategory]>=self.cov and specificity[subcategory]>=self.spec:
+                        result["Root"][category].append(subcategory)
+
 
         print ""
         print "Classification:"
-        result=["Root"]
-        for category in coverage.keys():
-            if coverage[category]>=self.cov and specificity[category]>=self.spec:
-                result.append(category)
+        #print result
 
-        for i in range(len(result)-1):
-            print result[i]+"/",
-        print result[len(result)-1]
+        if result["Root"]=={} :
+            print "/Root"
+        else:
+            for category in result["Root"]:
+                if not len(result["Root"][category]):
+                    print "/Root/"+category
+                else:
+                    for subcategory in result["Root"][category]:
+                        print "/Root/"+category+"/"+subcategory
+        #print result[len(result)-1]
         return result
 
 
 if __name__ == '__main__':
-    qprobe=probe('diabetes.org','OzVX5Yq6tlnpOrdFaJkqIdoVAs7zFQrn+dbBhFHBAhw', 100, 0.6)
+    qprobe=probe('yahoo.com','XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0', 100, 0.8)
     qprobe.build()
     #print qprobe.url["Root"]
