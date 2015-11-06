@@ -96,11 +96,11 @@ class summary:
 		temp = set()
 
 		# generate content summary for each non leaf category
-        for category in self.resultList["Root"]:
-            if category in ["Computers", "Health", "Sports"] and category not in temp:
-                print "\nCreating Content Summary for: " + category
-                self.__generateForCategory(category)
-                temp.add(category)
+		for category in self.resultList["Root"]:
+			if category in ["Computers", "Health", "Sports"] and category not in temp:
+				print "\nCreating Content Summary for: " + category
+				self.__generateForCategory(category)
+				temp.add(category)
 
-        print "\nCreating Content Summary for: Root"
-        self.__generateForCategory("Root")
+		print "\nCreating Content Summary for: Root"
+		self.__generateForCategory("Root")
