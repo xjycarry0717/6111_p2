@@ -19,6 +19,11 @@ python main.py <account key> <t_es> <t_ec> <host>
 
 d. Internal design
 part 1)
+This part implements the algorithm in Fig 4 of the paper.
+1.Firstly query lists corresponding to certain categories are parsed from txt files.
+2.Then use bing api to search the each query in the list and save 'Webtotal' numbers(which is useful for calculating specificity and coverage) and top four web results' urls.
+3.Finally check if a certain category can meet the Especificity and Ecoverage requirements, return all satisfied categories.
+
 
 part 2)
 After getting all the url for each category, 
@@ -33,5 +38,5 @@ After url retrieval, for each page,
 Then map<word, frequency> is built and then wrote to file.
 Each page retrieved is processed before fetching next page to space requests.
 
-e. Bing account key
-1.XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0
+e. Bing account key:
+XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0
