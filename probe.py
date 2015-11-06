@@ -80,18 +80,14 @@ class probe:
 
         print ""
         print "Classification:"
-        result=["Root"]
+        resultList = []
+        result = ["Root"]
         for category in coverage.keys():
             if coverage[category]>=self.cov and specificity[category]>=self.spec:
                 result.append(category)
+        resultList.append(result)
 
         for i in range(len(result)-1):
             print result[i]+"/",
         print result[len(result)-1]
-        return result
-
-
-if __name__ == '__main__':
-    qprobe=probe('diabetes.org','OzVX5Yq6tlnpOrdFaJkqIdoVAs7zFQrn+dbBhFHBAhw', 100, 0.6)
-    qprobe.build()
-    #print qprobe.url["Root"]
+        return resultList
