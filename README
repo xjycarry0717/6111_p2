@@ -27,16 +27,51 @@ This part implements the algorithm in Fig 4 of the paper.
 
 part 2)
 After getting all the url for each category, 
-	For each level-1 category, duplicate urls are elimiated. All the url are retrieved except pdf and ppt. If there is an error during url retrieval, the url is ignored; 
-	For root category, duplicate urls from subcategories are eliminated.
-After url retrieval, for each page,
-	Remove reference section at the end.
-	Remove everything inside [].
-	Change char other than alphabet to space.
-	Separate words by space.
-	Change words to lowercase.
+	1. For each level-1 category, duplicate urls are elimiated. All the url are retrieved except pdf and ppt. If there is error during retrieval, the url is ignored. 
+	2. For root category, duplicate urls from subcategories are eliminated and content summary from subcategories are calculated and stored during previous rounds which will also be included in root's content summary.
+After url retrieval, each page is processed.
 Then map<word, frequency> is built and then wrote to file.
 Each page retrieved is processed before fetching next page to space requests.
 
 e. Bing account key:
 XZHHHSav+P0bCzjXuYSENSNmh2p+0OB0TCEy0IBV1e0
+
+f. Performance
+Classificaiton is the same as reference. However, content summary are slightly differet due to different factors: lynx unable to open url, different methods and uncertainties of fetching top-4 url, including pdf/ppt or not, small difference in parsing documents...
+Nevertheless, while the word number might have a big difference due to pdf/ppt, the word frequency difference is quite small compared to the large sample document sizes. And for those important words, we see the exact match in frquency.
+
+For example, health.com with 0.6 and 100, some of the outputs:
+
+our implementation:			reference
+
+Classification:	
+/Root/Health/Fitness		/Root/Health/Fitness
+
+Health-health.com.txt:
+colorectal#14				colorectal#13.0#-1.0
+depression#101				depression#101.0#-1.0
+glutamine#1 				glutamine#1.0#-1.0x
+painkiller#2				painkiller#2.0#-1.0
+rehydrate#1 				rehydrate#1.0#-1.0
+suppressants#1 				suppressants#1.0#-1.0
+university#35				university#34.0#-1.0
+veteran#2					veteran#2.0#-1.0
+...							...
+5710 total					5701 total
+
+Root-health.com.txt:
+							aa#1.0#-1.0
+depression#261				depression#260.0#-1.0
+							iiiii#1.0#-1.0
+inhaler#2   				inhaler#2.0#-1.0
+lung#50 					lung#50.0#-1.0
+nutrition#255				nutrition#254.0#-1.0
+orenstein#1 				orenstein#1.0#-1.0
+toothache#1 				toothache#1.0#-1.0
+							zzy#1.0#-1.0
+...							...
+10523 total 				93450 total
+
+
+
+
