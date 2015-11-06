@@ -102,5 +102,5 @@ class summary:
                 self.__generateForCategory(category)
                 temp.add(category)
 
-		print "\nCreating Content Summary for: Root"	
-		self.__generateForCategory("Root")
+        print "\nCreating Content Summary for: Root"
+        self.__generateForCategory("Root")
